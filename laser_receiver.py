@@ -380,16 +380,17 @@ class App(tk.Tk):
                       fill=MUTED, font=self.F(9, "bold"), tags="static")
 
         base = 185
-        self.box(110, base, 90, 18, 12, "#3b3b3b", "#2f2f2f", "#343434")
-        self.box(110, base - 30, 90, 10, 70, "#4a4a4a", "#2a2a2a", "#303030")
+        # Receiver path runs left-to-right: optical sensor -> ESP32 -> PC.
+        self.box(110, base, 75, 24, 28, "#5d5d5d", "#333333", "#404040")
+        self.box(110, base - 30, 75, 12, 8, "#777777", "#444444", "#555555")
         self.box(350, base, 100, 56, 12, "#3c8a85", "#2a6360", "#327873")
-        self.box(690, base, 75, 24, 28, "#5d5d5d", "#333333", "#404040")
-        self.box(690, base - 30, 75, 12, 8, "#777777", "#444444", "#555555")
+        self.box(690, base, 90, 18, 12, "#3b3b3b", "#2f2f2f", "#343434")
+        self.box(690, base - 30, 90, 10, 70, "#4a4a4a", "#2a2a2a", "#303030")
 
         for x, name, sub in [
-            (155, "PC", "receiver app"),
+            (147, "Optical sensor", "receiver module"),
             (400, "ESP32 #2", "USB serial"),
-            (725, "Optical sensor", "receiver module")
+            (735, "PC", "receiver app")
         ]:
             c.create_text(X(x), Y(base + 24), text=name, fill=FG,
                           font=self.F(11, "bold"), tags="static")
@@ -398,14 +399,14 @@ class App(tk.Tk):
 
         c.create_line(X(205), Y(base - 22), X(335), Y(base - 22),
                       fill=MUTED, arrow="last", tags="static")
-        c.create_text(X(270), Y(base - 36), text="USB", fill=MUTED,
+        c.create_text(X(270), Y(base - 36), text="decoded signal", fill=MUTED,
                       font=self.F(9), tags="static")
-        c.create_line(X(665), Y(base - 22), X(535), Y(base - 22),
+        c.create_line(X(465), Y(base - 22), X(675), Y(base - 22),
                       fill=MUTED, arrow="last", tags="static")
-        c.create_text(X(600), Y(base - 36), text="decoded signal", fill=MUTED,
+        c.create_text(X(570), Y(base - 36), text="USB", fill=MUTED,
                       font=self.F(9), tags="static")
 
-        c.create_text(X(880), Y(base - 70), text="incoming light", fill=MUTED,
+        c.create_text(X(55), Y(base - 70), text="incoming light", fill=MUTED,
                       font=self.F(9), tags="static")
         c.create_line(X(900), Y(350), X(900), Y(416), fill="#2c2c2c",
                       dash=(2, 4), tags="static")
@@ -424,7 +425,7 @@ class App(tk.Tk):
 
         # Incoming beam is a conceptual illustration, not a measured optical waveform.
         beam_y = Y(145)
-        beam_start, beam_end = X(900), X(770)
+        beam_start, beam_end = X(40), X(110)
         recent = now - self.last_data_time < 0.35
 
         if self.conn == "connected":
@@ -435,10 +436,10 @@ class App(tk.Tk):
             c.create_line(beam_start, beam_y, beam_end, beam_y,
                           fill=GRAY, width=1, dash=(3, 6), tags="dyn")
 
-        # Data packets travel from the sensor toward the ESP32 and then the PC.
+        # Data packets travel left-to-right: sensor -> ESP32 -> PC.
         for stamp in self.packets:
             progress = min(1.0, max(0.0, 1.0 - (now - stamp) / 1.2))
-            x = 770 - progress * 570
+            x = 155 + progress * 570
             y = 145 + math.sin(progress * math.pi * 3) * 7
             radius = 4 * self.s
             c.create_oval(X(x) - radius, Y(y) - radius, X(x) + radius, Y(y) + radius,
