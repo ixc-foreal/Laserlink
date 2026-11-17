@@ -406,7 +406,7 @@ class App(tk.Tk):
         c.create_text(X(570), Y(base - 36), text="USB", fill=MUTED,
                       font=self.F(9), tags="static")
 
-        c.create_text(X(55), Y(base - 70), text="incoming light", fill=MUTED,
+        c.create_text(X(880), Y(base - 70), text="incoming light", fill=MUTED,
                       font=self.F(9), tags="static")
         c.create_line(X(900), Y(350), X(900), Y(416), fill="#2c2c2c",
                       dash=(2, 4), tags="static")
@@ -425,7 +425,7 @@ class App(tk.Tk):
 
         # Incoming beam is a conceptual illustration, not a measured optical waveform.
         beam_y = Y(145)
-        beam_start, beam_end = X(40), X(110)
+        beam_start, beam_end = X(900), X(185)
         recent = now - self.last_data_time < 0.35
 
         if self.conn == "connected":
