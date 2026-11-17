@@ -1,107 +1,112 @@
-# 🔴 LASERLINK
+# LASERLINK
 
-### Optical Data Transmission System using Laser & ESP32
+### Optical data transmission using a laser and ESP32
 
-LASERLINK is an experimental optical communication system that transmits digital information using a laser and an ESP32 microcontroller.
+LASERLINK is an experimental optical communication project. Its desktop sender application communicates with an ESP32 over USB serial and provides a visual preview of the data being transmitted.
 
-The project converts messages into digital data and sends them through an optical transmission system, exploring how information can be communicated using light.
+## Current sender application
 
----
+The current sender is **`laser_sender.py`**. It uses Python's built-in Tkinter GUI toolkit and PySerial.
 
-## ⚡ Features
+Features:
+- Detect and select available serial ports
+- Connect to an ESP32 over USB serial
+- Set the transmission speed
+- Send typed text
+- Send the contents of a selected file
+- Manually switch the laser output on or off and run a test blink
+- Preview the hardware path, transmitted bits, and recent signal activity
+- Reconnect when the USB serial connection is lost
 
-- 🖥️ Full-screen desktop control interface
-- 🔌 ESP32 serial port connection
-- 🔴 Laser-based message transmission
-- 💬 Send custom text messages
-- 📤 Dedicated Transmit panel
-- 📥 Receiver panel for future optical data reception
-- ▣ Projection panel for displaying received data
-- 🪟 Standalone Windows application
+The earlier **`laserlink.py`** CustomTkinter application is retained in the repository as the previous interface. Use `laser_sender.py` for the current sender.
 
----
+## Requirements
 
-## 🛠️ Technologies Used
+- Windows, for the packaged executable instructions below
+- Python 3.10 or newer
+- An ESP32 configured with firmware that understands the sender's serial command protocol
+- A compatible laser transmitter circuit
 
-- **Python**
-- **CustomTkinter** — Desktop user interface
-- **PySerial** — ESP32 serial communication
-- **ESP32** — Microcontroller control
-- **Laser Module** — Optical data transmission
-
----
-
-## 🚀 Installation
-
-### Option 1: Download the Windows Application
-
-Download the latest `laser_link.exe` from the **Releases** section and run it on a Windows PC.
-
-### Option 2: Run from Source
-
-Clone this repository:
+Install the Python dependency:
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/LASERLINK.git
-cd LASERLINK
+python -m pip install -r requirements.txt
 ```
 
-Install the required Python packages:
+Tkinter is included with most standard Windows Python installations. PySerial is installed through `requirements.txt`.
+
+## Run from source
+
+Clone the repository:
 
 ```bash
-pip install customtkinter pyserial
+git clone https://github.com/ixc-foreal/Laserlink.git
+cd Laserlink
 ```
 
-Run the application:
+Install dependencies and launch the current sender:
 
 ```bash
-python laserlink.py
+python -m pip install -r requirements.txt
+python laser_sender.py
 ```
 
+Keep `laserlink.ico` in the same folder as `laser_sender.py`; the application uses it for its window icon.
+
+## Build a Windows executable
+
+Install PyInstaller:
+
+```bash
+python -m pip install pyinstaller
+```
+
+From the project folder, build the standalone executable:
+
+```bash
+py -m PyInstaller --clean --noconfirm --onefile --windowed --icon=laserlink.ico --add-data "laserlink.ico;." --name=LASERLINK-Sender laser_sender.py
+```
+
+The executable will be created at:
+
+```text
+dist\LASERLINK-Sender.exe
+```
+
+The `--add-data` option bundles the icon so the application can find it when running as a PyInstaller executable.
+
+## Basic usage
+
+1. Connect the ESP32 to the computer over USB.
+2. Open LASERLINK Sender.
+3. Select the ESP32 serial port. The app attempts to preselect a CP210x port when one is detected.
+4. Click **Connect**.
+5. Choose a transmission speed.
+6. Enter a message and click **Send**, or use **Send file** to transmit a file's contents.
+7. Use the signal preview and history area to observe the sender activity.
+
+The sender expects compatible ESP32 firmware. The desktop application alone does not provide the receiver hardware or receiver-side software.
+
+## Repository files
+
+| File | Purpose |
+| --- | --- |
+| `laser_sender.py` | Current Tkinter sender application |
+| `laserlink.py` | Previous CustomTkinter application |
+| `laserlink.ico` | Windows application icon |
+| `laserlink_icon.png` | Project icon image |
+| `requirements.txt` | Python package dependencies |
+
+## Releases
+
+See [GitHub Releases](https://github.com/ixc-foreal/Laserlink/releases) for downloadable builds.
+
+The existing `v1.0.0` release is preserved. The updated sender source is in the repository; a new `v1.1.0` executable release should be published after the updated build has been tested with the ESP32 hardware.
+
+## Safety
+
+Never point a laser toward a person's or animal's eyes, vehicles, aircraft, or reflective surfaces. Use an appropriate low-power module and follow its safety documentation.
+
 ---
 
-## 🖥️ How It Works
-
-1. Connect the ESP32 to your computer.
-2. Open the LASERLINK application.
-3. Select the ESP32 serial port.
-4. Connect to the device.
-5. Enter a message.
-6. Press **TRANSMIT VIA LASER**.
-7. The ESP32 processes the data and controls the laser transmission.
-
-The receiver-side system is currently under development.
-
----
-
-## 🔮 Future Development
-
-- 📡 Live optical data receiver
-- 🔢 Real-time binary data visualization
-- 📺 Enhanced projection interface
-- ⚡ Faster optical transmission speeds
-- 🛡️ Error detection and improved communication reliability
-
----
-
-## 📦 Project Status
-
-🟢 **Transmitter System:** Working  
-🟡 **Receiver System:** Under Development  
-🔵 **Desktop Application:** Available
-
----
-
-## 📸 Project Preview
-
-LASERLINK is being developed as an experimental project exploring practical optical communication using affordable hardware.
-
----
-
-### ⚠️ Safety Note
-
-Avoid pointing laser modules toward people, animals, vehicles, or reflective surfaces. Always use the optical transmitter responsibly.
-
----
-
-**Built with curiosity, code, and a little bit of light. 🔴⚡**
+Built with curiosity, code, and a little bit of light.
