@@ -18,7 +18,9 @@ Features:
 - Preview the hardware path, transmitted bits, and recent signal activity
 - Reconnect when the USB serial connection is lost
 
-The earlier **`laserlink.py`** CustomTkinter application is retained in the repository as the previous interface. Use `laser_sender.py` for the current sender.
+The matching receiver application is **`laser_receiver.py`**. It uses the same Tkinter theme and hardware-visualisation style, listens for decoded data from a receiver ESP32 over USB serial, displays incoming text, tracks received bytes and characters, and can save received text to a file. Its **Insert demo data** button tests the desktop interface locally; demo text is not received over the laser.
+
+The earlier **`laserlink.py`** CustomTkinter application is retained in the repository as the previous interface.
 
 ## Requirements
 
@@ -51,7 +53,13 @@ python -m pip install -r requirements.txt
 python laser_sender.py
 ```
 
-Keep `laserlink.ico` in the same folder as `laser_sender.py`; the application uses it for its window icon.
+Launch the receiver separately with:
+
+```bash
+python laser_receiver.py
+```
+
+Keep `laserlink.ico` in the same folder as both current applications; they use it for their window icon.
 
 ## Build a Windows executable
 
@@ -67,13 +75,13 @@ From the project folder, build the standalone executable:
 py -m PyInstaller --clean --noconfirm --onefile --windowed --icon=laserlink.ico --add-data "laserlink.ico;." --name=LASERLINK-Sender laser_sender.py
 ```
 
-The executable will be created at:
+The sender executable will be created at `dist\LASERLINK-Sender.exe`. Build the receiver with:
 
-```text
-dist\LASERLINK-Sender.exe
+```bash
+py -m PyInstaller --clean --noconfirm --onefile --windowed --icon=laserlink.ico --add-data "laserlink.ico;." --name=LASERLINK-Receiver laser_receiver.py
 ```
 
-The `--add-data` option bundles the icon so the application can find it when running as a PyInstaller executable.
+This creates `dist\LASERLINK-Receiver.exe`. The `--add-data` option bundles the icon so each application can find it when running as a PyInstaller executable.
 
 ## Basic usage
 
@@ -85,13 +93,14 @@ The `--add-data` option bundles the icon so the application can find it when run
 6. Enter a message and click **Send**, or use **Send file** to transmit a file's contents.
 7. Use the signal preview and history area to observe the sender activity.
 
-The sender expects compatible ESP32 firmware. The desktop application alone does not provide the receiver hardware or receiver-side software.
+The sender and receiver desktop applications require compatible ESP32 firmware. The receiver application expects the receiver ESP32 to send decoded text bytes over USB serial at 115200 baud. The optical decoding itself must be implemented on the receiver ESP32. Until that hardware and firmware are available, use **Insert demo data** only to test the receiver interface.
 
 ## Repository files
 
 | File | Purpose |
 | --- | --- |
-| `laser_sender.py` | Current Tkinter sender application |
+| `laser_sender.py` | Tkinter sender application |
+| `laser_receiver.py` | Matching Tkinter receiver application |
 | `laserlink.py` | Previous CustomTkinter application |
 | `laserlink.ico` | Windows application icon |
 | `laserlink_icon.png` | Project icon image |
